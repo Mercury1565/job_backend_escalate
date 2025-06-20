@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JobModule } from './modules/job/job.module';
+import { ApplicationModule } from './modules/application/application.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { JobModule } from './modules/job/job.module';
     UserModule,
     AuthModule,
     JobModule,
+    ApplicationModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
