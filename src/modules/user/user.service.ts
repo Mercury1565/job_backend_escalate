@@ -1,10 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/entities/user.entity';
-import { UserRole } from 'src/shared/enums/userRole';
 
 @Injectable()
 export class UserService {
@@ -22,11 +21,6 @@ export class UserService {
     });
     if (existingUser) {
       throw new BadRequestException('Email already exists');
-    }
-
-    // Validate role
-    if (!Object.values(UserRole).includes(role)) {
-      throw new BadRequestException('Invalid role');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -53,7 +47,12 @@ export class UserService {
     };
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return await this.userRepository.findOne({ where: { email } });
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    return user;
   }
 }
